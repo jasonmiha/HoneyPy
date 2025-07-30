@@ -6,6 +6,9 @@ import paramiko
 
 # Constants
 logging_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+SSH_BANNER = "SSH-2.0-OpenSSH_7.9p1 Debian-10+deb10u2"
+
+host_key = 'server.key'
 
 # Loggers & Logging Files
 
@@ -89,5 +92,52 @@ class Server(paramiko.ServerInterface):
     def check_channel_exec_request(self, channel, command) -> int:  # Check if the command is a valid shell command
         command = str(command)
         return True
+    
+def client_handle(client, addr, username, password):
+
+    client_ip = addr[0]         # Extract the client's IP address from the connection tuple
+    print(f"{client_ip} has connected to the server.")
+
+    try:
+        # Initialize a Paramiko SSH transport over the incoming client socket
+        transport = paramiko.Transport()
+
+        # Set the SSH version banner shown to the client
+        transport.local_version = SSH_BANNER
+
+        # Instantiate the server interface with provided credentials
+        server = Server(client_ip=client_ip, input_username=username, input_password=password)
+
+        # Add the server's private host key to the SSH transport
+        transport.add_server_key(host_key)
+
+        # Start the SSH server with our custom Server interface
+        transport.start_server(server=server)
+
+        # Wait for the client to open a channel (max wait: 100s)
+        channel = transport.accept(100)
+        if channel is None:
+            print("No channel was opened.")     # Exit early if no channel is established
+
+        # Send a short banner message after successful login
+        standard_banner = b"** Authorized access only. Activity may be monitored. **\n\n"
+        channel.send(standard_banner)
+
+        # Launch the emulated shell to interact with the attacker
+        emulated_shell(channel, client_ip=client_ip)
+
+    except Exception as error:
+        # Print the error if anything fails during the SSH session setup or interaction
+        print(error)
+        print("!!! Error !!!")
+        
+    finally:        # Always attempt to clean up the transport and client socket
+        try:
+            transport.close()
+        except Exception as error:
+            print(error)
+            print("!!! Error !!!")
+
+        client.close()      # Close the client socket no matter what
 
 # Provision SSH-based Honeypot
