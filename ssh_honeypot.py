@@ -44,14 +44,19 @@ def emulated_shell(channel, client_ip):     # Define the emulated shell function
                 return  # Exit the function instead of closing the channel
             elif command.strip() == b'pwd':
                 response = b"\n" + b"\\usr\\local\\" + b"\r\n"
+                creds_logger.info(f'Command {command.strip()}' + 'executed by ' + f'{client_ip}')
             elif command.strip() == b'whoami':
                 response = b"\n" + b"corpuser1" + b"\r\n"
+                creds_logger.info(f'Command {command.strip()}' + 'executed by ' + f'{client_ip}')
             elif command.strip() == b'ls':
                 response = b"\n" + b"jumpbox1.conf" + b"\r\n"
+                creds_logger.info(f'Command {command.strip()}' + 'executed by ' + f'{client_ip}')
             elif command.strip() == b'cat jumpbox1.conf':
                 response = b"\n" + b"Go to deeboodah.com." + b"\r\n"
+                creds_logger.info(f'Command {command.strip()}' + 'executed by ' + f'{client_ip}')
             else:
                 response = b'\n' + b'Command not found' + b'\r\n'
+                creds_logger.info(f'Command {command.strip()}' + 'executed by ' + f'{client_ip}')
             channel.send(response)
             channel.send(b'corporate-shell$ ')
             command = b""
@@ -77,6 +82,9 @@ class Server(paramiko.ServerInterface):
         return "password"
     
     def check_auth_password(self, username: str, password: str) -> int:
+        funnel_logger.info(f'Client {self.client_ip} attempted connection with ' + f'username: {username}, ' + f'password: {password}')
+        creds_logger.info(f'{self.client_ip}, {username}, {password}')
+
         # Authenticate user by comparing provided credentials with expected honeypot credentials
         # If no expected credentials are set, accept any login attempt
         if self.input_username is not None and self.input_password is not None:
@@ -164,4 +172,4 @@ def honeypot(address, port, username, password):
         except Exception as error:
             print(error)
 
-honeypot('127.0.0.1', 2223, 'username', 'password')
+honeypot('127.0.0.1', 2223, username=None, password=None)

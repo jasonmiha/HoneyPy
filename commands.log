@@ -1,0 +1,8 @@
+2025-07-29 17:45:10,486 - CredsLogger - INFO - 127.0.0.1, username, password
+2025-07-29 17:45:13,177 - CredsLogger - INFO - Command b'hi'executed by 127.0.0.1
+2025-07-29 17:45:15,479 - CredsLogger - INFO - Command b'hi'executed by 127.0.0.1
+2025-07-29 17:45:18,203 - CredsLogger - INFO - Command b'whoami'executed by 127.0.0.1
+2025-07-29 17:45:30,895 - CredsLogger - INFO - Command b'cat jumpbox.conf'executed by 127.0.0.1
+2025-07-29 17:46:42,656 - CredsLogger - INFO - 127.0.0.1, username, hello
+2025-07-29 17:46:44,710 - CredsLogger - INFO - 127.0.0.1, username, exit
+2025-07-29 17:47:10,251 - CredsLogger - INFO - 127.0.0.1, username, hi
