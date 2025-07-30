@@ -172,4 +172,6 @@ def honeypot(address, port, username, password):
         except Exception as error:
             print(error)
 
-honeypot('127.0.0.1', 2223, username=None, password=None)
+# Only run the honeypot if this file is executed directly (not when imported)
+if __name__ == "__main__":
+    honeypot('127.0.0.1', 2223, username=None, password=None)

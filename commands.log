@@ -6,3 +6,5 @@
 2025-07-29 17:46:42,656 - CredsLogger - INFO - 127.0.0.1, username, hello
 2025-07-29 17:46:44,710 - CredsLogger - INFO - 127.0.0.1, username, exit
 2025-07-29 17:47:10,251 - CredsLogger - INFO - 127.0.0.1, username, hi
+2025-07-29 18:16:38,123 - CredsLogger - INFO - 127.0.0.1, username, hi
+2025-07-29 18:16:39,590 - CredsLogger - INFO - Command b'ls'executed by 127.0.0.1
